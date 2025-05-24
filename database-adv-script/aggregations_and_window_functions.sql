@@ -19,5 +19,20 @@ FROM (
         bookings
     GROUP BY 
         property_id
-) AS property_bookings;
+) AS ranked_properties;
+
+
+SELECT 
+    property_id,
+    total_bookings,
+    ROW_NUMBER() OVER (ORDER BY total_bookings DESC) AS booking_row_number
+FROM (
+    SELECT 
+        property_id,
+        COUNT(*) AS total_bookings
+    FROM 
+        bookings
+    GROUP BY 
+        property_id
+) AS numbered_properties;
 
